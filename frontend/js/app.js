@@ -18,9 +18,13 @@ let app = {
         // On ajoute l'écouteur pour l'event "click"
         addVideogameButtonElement.addEventListener('click', app.handleClickToAddVideogame);
 
-        // TODO
+        // On récupère le bouton pour valider le formulaire
+        let validateVideogameButtonElement = document.querySelector('#submitValidateButton'); 
+        // on ajoute un évent
+        validateVideogameButtonElement.addEventListener('click', app.handleValidateVideogame); 
+
         // On récupère le <select> 
-        let selectVideogameButtonElement = document.querySelector('.form-control'); 
+        let selectVideogameButtonElement = document.querySelector('.form-control');
         // On ajoute un évènement pour l'event 
         selectVideogameButtonElement.addEventListener('change', app.handleVideogameSelected);
     },
@@ -78,27 +82,27 @@ let app = {
                         const templateElement = document.querySelector("#reviewTemplate").content.cloneNode(true);
 
                         // mise à jour du titre de la review 
-                        templateElement.querySelector('.reviewTitle').textContent = videoData.title; 
+                        templateElement.querySelector('.reviewTitle').textContent = videoData.title;
 
                         // mise à jour du nom de l'auteur 
-                        templateElement.querySelector('.reviewAuthor').textContent = videoData.author; 
+                        templateElement.querySelector('.reviewAuthor').textContent = videoData.author;
 
                         // mise à jour de la date de publication
-                        templateElement.querySelector('.reviewPublication').textContent = videoData.publication_date; 
+                        templateElement.querySelector('.reviewPublication').textContent = videoData.publication_date;
 
                         // mise à jour du texte
-                        templateElement.querySelector('.reviewText').textContent = videoData.text; 
+                        templateElement.querySelector('.reviewText').textContent = videoData.text;
 
                         // mise à jour des notes 
-                        templateElement.querySelector('.reviewDisplay').textContent += videoData.display_note; 
-                        templateElement.querySelector('.reviewGameplay').textContent += videoData.gameplay_note; 
-                        templateElement.querySelector('.reviewScenario').textContent += videoData.scenario_note; 
-                        templateElement.querySelector('.reviewLifetime').textContent += videoData.lifetime_note; 
-    
+                        templateElement.querySelector('.reviewDisplay').textContent += videoData.display_note;
+                        templateElement.querySelector('.reviewGameplay').textContent += videoData.gameplay_note;
+                        templateElement.querySelector('.reviewScenario').textContent += videoData.scenario_note;
+                        templateElement.querySelector('.reviewLifetime').textContent += videoData.lifetime_note;
+
 
                         // mtn que le template est mis à jour avec les info, on va pouvoir l'intégrer au reste du html
-                        let reviewElement = document.querySelector('#review'); 
-                        reviewElement.append(templateElement); 
+                        let reviewElement = document.querySelector('#review');
+                        reviewElement.append(templateElement);
 
                     }
                 }
@@ -115,14 +119,70 @@ let app = {
         // https://getbootstrap.com/docs/4.4/components/modal/#modalshow
         // jQuery obligatoire ici
         $('#addVideogameModal').modal('show');
+
     },
 
+    handleValidateVideogame: function(evt){
+        evt.preventDefault();
 
+        // on récupère la valeur des inputs pour les transférer en BDD
+        const videogameElementInput = evt.currentTarget;
+        console.log(videogameElementInput);
+        // valeur du name
+        const newVideogameName = document.querySelector('#inputName');
+        newVideogameNameValue = newVideogameName.value;
+
+        // valeur de l'éditeur
+        const newVideogameEditor = document.querySelector('#inputEditor');
+        newVideogameEditorValue = newVideogameEditor.value;
+
+        // on stocke les données qu'on veut envoyer en BDD
+        const data = {
+            'name': newVideogameNameValue,
+            'editor': newVideogameEditorValue,
+        }
+
+        // On prépare les entêtes HTTP (headers) de la requête
+        // afin de spécifier que les données sont en JSON
+        const httpHeaders = new Headers();
+        httpHeaders.append("Content-Type", "application/json");
+
+        const fetchOptions = {
+
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            // On ajoute les headers dans les options
+            headers: httpHeaders,
+            // On ajoute les données, encodées en JSON, dans le corps de la requête
+            body: JSON.stringify(data)
+        };
+
+            // Exécuter la requête HTTP avec FETCH
+            fetch('http://localhost:8080/videogames', fetchOptions)
+            .then(
+                function (response) {
+                    // console.log(response);
+                    // Si HTTP status code à 201 => OK
+                    if (response.status == 201) {
+                        alert('ajout effectué');
+
+                    } else {
+                        alert('ajout KO');
+                    }
+                }
+            )
+
+    }, 
+
+    /**
+     * Méthode permettant de lister les videogames dans le menu déroulant
+     */
     loadVideoGames: function () {
         // Charger toutes les données des videogames
         let fetchOptions = {
-           
-            method: 'GET', 
+
+            method: 'GET',
             mode: 'cors',
             cache: 'no-cache'
         };
@@ -133,33 +193,33 @@ let app = {
          *
          */
         request = fetch('http://localhost:8080/videogames', fetchOptions);
-      
+
         request.then(
-              
+
                 function (response) {
-                
+
                     return response.json();
                 }
             )
 
-        
+
             .then(
 
                 function (data) {
                     console.log(data);
 
-                    for(videogame of data) {
+                    for (videogame of data) {
 
-                    // on récupère le select 
-                    let selectVideogameButtonElement = document.querySelector('.form-control'); 
+                        // on récupère le select 
+                        let selectVideogameButtonElement = document.querySelector('.form-control');
 
-                    // on crée une option
-                    const optionChild = document.createElement('option'); 
-                    optionChild.textContent = videogame.name;
-                    optionChild.value = videogame.id; 
-                    
-                    // Ajouter une balise <option> par videogame
-                    selectVideogameButtonElement.append(optionChild); 
+                        // on crée une option
+                        const optionChild = document.createElement('option');
+                        optionChild.textContent = videogame.name;
+                        optionChild.value = videogame.id;
+
+                        // Ajouter une balise <option> par videogame
+                        selectVideogameButtonElement.append(optionChild);
 
                     }
 
@@ -169,6 +229,7 @@ let app = {
 
 
     }
+
 };
 
 document.addEventListener('DOMContentLoaded', app.init);
