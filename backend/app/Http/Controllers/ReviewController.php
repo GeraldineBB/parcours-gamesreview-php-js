@@ -13,7 +13,7 @@ class ReviewController extends Controller
      */
     public function list() {
         // Get all items
-        $list = Review::all();
+        $list = Review::all()->load('videogame');
 
         // Return JSON of this list
         return $this->sendJsonResponse($list, 200);

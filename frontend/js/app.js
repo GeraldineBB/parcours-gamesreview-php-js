@@ -19,9 +19,25 @@ let app = {
         addVideogameButtonElement.addEventListener('click', app.handleClickToAddVideogame);
         
         // TODO
+        // On récupère le <select> 
+        let selectVideogameButtonElement = document.querySelector('.form-control'); 
+        // On ajoute un évènement pour l'event 
+        selectVideogameButtonElement.addEventListener('click', app.handleVideogameSelected); 
     },
     handleVideogameSelected: function(evt) {
+
+        evt.preventDefault(); 
+
         // Récupérer la valeur du <select> (id du videogame)
+        let selectedVideogameElement = evt.currentTarget; 
+        let selectedVideogameElementValue = selectedVideogameElement.value; 
+        console.log (selectedVideogameElement); 
+
+        // On récupère l'option choisie et sa valeur ensuite
+        const videogameOptions = selectedVideogameElement.options; 
+        const selectedIndex = selectedVideogameElement.selectedIndex; 
+        const videoGameId = videogameOptions[selectedIndex].value; 
+        console.log (videoGameId); 
 
         // Vider le contenu de div#review
 

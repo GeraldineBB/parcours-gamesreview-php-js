@@ -11,7 +11,7 @@ class Review extends Model
      */
     public function videogame()
     {
-        // TODO
+        return $this->belongsTo('App\Models\VideoGame');
     }
 
     /**
@@ -19,6 +19,5 @@ class Review extends Model
      */
     public function platform()
     {
-        // TODO
-    }
+        return $this->belongsTo('App\Models\VideoGame');    }
 }
