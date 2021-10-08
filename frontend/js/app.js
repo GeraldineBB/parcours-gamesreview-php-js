@@ -20,7 +20,7 @@ let app = {
 
         // TODO
         // On récupère le <select> 
-        let selectVideogameButtonElement = document.querySelector('.form-control');
+        let selectVideogameButtonElement = document.querySelector('.form-control'); 
         // On ajoute un évènement pour l'event 
         selectVideogameButtonElement.addEventListener('change', app.handleVideogameSelected);
     },
@@ -111,18 +111,63 @@ let app = {
         // Ajouter dans le DOM
     },
 
-
-
-
-
     handleClickToAddVideogame: function (evt) {
         // https://getbootstrap.com/docs/4.4/components/modal/#modalshow
         // jQuery obligatoire ici
         $('#addVideogameModal').modal('show');
     },
+
+
     loadVideoGames: function () {
         // Charger toutes les données des videogames
-        // Ajouter une balise <option> par videogame
+        let fetchOptions = {
+           
+            method: 'GET', 
+            mode: 'cors',
+            cache: 'no-cache'
+        };
+
+
+        /**
+         * La fonction native fetch() permet de lancer une requête HTTP depuis JS.
+         *
+         */
+        request = fetch('http://localhost:8080/videogames', fetchOptions);
+      
+        request.then(
+              
+                function (response) {
+                
+                    return response.json();
+                }
+            )
+
+        
+            .then(
+
+                function (data) {
+                    console.log(data);
+
+                    for(videogame of data) {
+
+                    // on récupère le select 
+                    let selectVideogameButtonElement = document.querySelector('.form-control'); 
+
+                    // on crée une option
+                    const optionChild = document.createElement('option'); 
+                    optionChild.textContent = videogame.name;
+                    optionChild.value = videogame.id; 
+                    
+                    // Ajouter une balise <option> par videogame
+                    selectVideogameButtonElement.append(optionChild); 
+
+                    }
+
+                }
+
+            );
+
+
     }
 };
 
