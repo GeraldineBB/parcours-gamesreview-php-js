@@ -29,6 +29,27 @@ $router->get(
     ]
 );
 
+/**
+ * Route permettant d'afficher la liste des vidéogames dans le menu déroulant
+ */
+$router->get(
+    'videogames',
+    [
+        'as' => 'videogame-list',
+        'uses' => 'VideogameController@list'
+    ]
+);
+
+/**
+ * Route permettant l'ajout de vidéo
+ */
+$router->post(
+    'videogames',
+    [
+        'as' => 'videogame-create',
+        'uses' => 'VideogameController@create'
+    ]
+);
 
 // --------- REVIEWS ---------
 
