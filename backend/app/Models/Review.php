@@ -11,7 +11,7 @@ class Review extends Model
      */
     public function videogame()
     {
-        return $this->belongsTo('App\Models\VideoGame');
+        return $this->belongsTo('App\Models\Videogame');
     }
 
     /**
@@ -19,5 +19,6 @@ class Review extends Model
      */
     public function platform()
     {
-        return $this->belongsTo('App\Models\VideoGame');    }
+        return $this->belongsTo('App\Models\Videogame');
+    }
 }
