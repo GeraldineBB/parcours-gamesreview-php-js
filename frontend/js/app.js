@@ -99,6 +99,13 @@ let app = {
                         templateElement.querySelector('.reviewScenario').textContent += videoData.scenario_note;
                         templateElement.querySelector('.reviewLifetime').textContent += videoData.lifetime_note;
 
+                        // BONUS
+                        // mise à jour du titre du jeux
+                        templateElement.querySelector('.reviewVideogame').textContent = videoData.videogame['name']; 
+                        // mise à jour de l'éditeur
+                        templateElement.querySelector('.reviewEditor').textContent = videoData.videogame['editor']; 
+                        // mise à jour de la plateforme
+                        templateElement.querySelector('.reviewPlatform').textContent = videoData.platform['name']; 
 
                         // mtn que le template est mis à jour avec les info, on va pouvoir l'intégrer au reste du html
                         let reviewElement = document.querySelector('#review');
@@ -206,7 +213,7 @@ let app = {
             .then(
 
                 function (data) {
-                    console.log(data);
+                    // console.log(data);
 
                     for (videogame of data) {
 
