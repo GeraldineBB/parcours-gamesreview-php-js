@@ -28,6 +28,7 @@ let app = {
         // On ajoute un évènement pour l'event 
         selectVideogameButtonElement.addEventListener('change', app.handleVideogameSelected);
     },
+
     handleVideogameSelected: function (evt) {
 
         evt.preventDefault();
@@ -174,6 +175,8 @@ let app = {
                     if (response.status == 201) {
                         alert('ajout effectué');
 
+                        // BONUS 2 : rajouter une option dans le menu avec données de l'input 
+                        // enlever la modale
                     } else {
                         alert('ajout KO');
                     }
